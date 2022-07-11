@@ -45,57 +45,58 @@ export function App() {
 
 
   useEffect(() => {
+    const fetchImages = (query, page) => {
+      // const { query, page } = this.state;
+      const perPage = 12;
+
+      // setState({ isLoading: true });
+      setIsLoading(true);
+
+      fetchData(query, page, perPage)
+        .then(({ hits, totalHits }) => {
+          const totalPages = Math.ceil(totalHits / perPage);
+
+          const data = hits.map(({ id, webformatURL, largeImageURL, tags }) => {
+            return {
+              id,
+              webformatURL,
+              largeImageURL,
+              tags,
+            };
+          });
+
+          setImages(images => [...images, ...data]);
+          setTotal(totalHits);
+
+          if (hits.length === 0) {
+            return toast.error('Sorry, no images found. Please, try again!');
+          }
+
+          if (page === 1) {
+            toast.success(`Hooray! We found ${totalHits} images.`);
+          }
+
+          if (page === totalPages) {
+            toast.info("You've reached the end of search results.");
+          }
+
+          // this.setState(({ images }) => ({
+          //   images: [...images, ...data],
+          //   // page: page + 1,
+          //   total: totalHits,
+          // }));
+        })
+        .catch(error => setError(error))
+        .finally(() => setIsLoading(false));
+      // .catch(error => setState({ error }))
+      // .finally(() => setState({ isLoading: false }));
+    };
+
     if (!query) return;
     fetchImages(query, page);
   }, [query, page]);
 
 
-  const fetchImages = (query, page) => {
-    // const { query, page } = this.state;
-    const perPage = 12;
-
-    // setState({ isLoading: true });
-    setIsLoading(true);
-
-    fetchData(query, page, perPage)
-      .then(({ hits, totalHits }) => {
-        const totalPages = Math.ceil(totalHits / perPage);
-
-        const data = hits.map(({ id, webformatURL, largeImageURL, tags }) => {
-          return {
-            id,
-            webformatURL,
-            largeImageURL,
-            tags,
-          };
-        });
-
-        setImages(images => [...images, ...data]);
-        setTotal(totalHits);
-
-        if (hits.length === 0) {
-          return toast.error('Sorry, no images found. Please, try again!');
-        }
-
-        if (page === 1) {
-          toast.success(`Hooray! We found ${totalHits} images.`);
-        }
-
-        if (page === totalPages) {
-          toast.info("You've reached the end of search results.");
-        }
-
-        // this.setState(({ images }) => ({
-        //   images: [...images, ...data],
-        //   // page: page + 1,
-        //   total: totalHits,
-        // }));
-      })
-      .catch(error => setError(error))
-      .finally(() => setIsLoading(false));
-    // .catch(error => setState({ error }))
-    // .finally(() => setState({ isLoading: false }));
-  };
 
   const handleSearch = query => {
     // if (query === query) return;
