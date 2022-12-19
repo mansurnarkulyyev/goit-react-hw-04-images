@@ -1,4 +1,4 @@
-// import { Component } from 'react';
+
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
@@ -10,21 +10,11 @@ import {
   SearchButton,
 } from './SearchBar.styled';
 
-// export class SearchBar extends Component {
-//   static propTypes = {
-//     onSubmit: PropTypes.func,
-//   };
-
-//   state = {
-//     query: '',
-//   };
 
 export function SearchBar({ onSubmit }) {
   const [query, setQuery] = useState('');
 
-  // handleChange = e => {
-  //   this.setState({ query: e.currentTarget.value });
-  // };
+ 
   const handleChange = e => {
     setQuery(e.currentTarget.value);
   };
@@ -35,19 +25,14 @@ export function SearchBar({ onSubmit }) {
       toast.warn('Please specify your query!');
       return;
     }
-    // this.props.onSubmit(this.state.query);
     onSubmit(query);
-    // this.reset();
     reset();
   };
 
   const reset = () => {
-    // this.setState({ query: '' });
     setQuery('');
   };
 
-  // render() {
-  // const { query } = this.state;
 
   return (
     <SearchHeader>
@@ -68,7 +53,6 @@ export function SearchBar({ onSubmit }) {
       </SearchForm>
     </SearchHeader>
   );
-  // }
 }
 
 SearchBar.propTypes = {
